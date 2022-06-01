@@ -8,7 +8,6 @@ let User = require('../models/user.model')
 require('dotenv').config()
 
 router.route('/').get((req, res) => {
-  console.log('test')
   User.find()
     .then((users) => res.json(users))
     .catch((err) => res.status(400).json('Error: ' + err))
