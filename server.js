@@ -43,14 +43,14 @@ app.use(cors(corsOptions))
 app.use('/users', require('./routes/users'))
 app.use('/qna', require('./routes/qna'))
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('../public'))
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(express.static('../public'))
 
-  const path = require('path')
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
-  })
-}
+//   const path = require('path')
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+//   })
+// }
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`)
