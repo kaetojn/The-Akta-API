@@ -11,13 +11,6 @@ app.get('/', (req, res) => {
   res.send('Hello World')
 })
 
-// app.all('*', function (req, res, next) {
-//   res.header('Access-Control-Allow-Origin', '*')
-//   res.header('Access-Control-Allow-Headers', 'X-Requested-With')
-//   res.header('Access-Control-Allow-Headers', 'Content-Type')
-//   next()
-// })
-
 app.options('*', cors())
 app.use(cookieParser())
 app.use(express.json())
@@ -42,15 +35,6 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use('/users', require('./routes/users'))
 app.use('/qna', require('./routes/qna'))
-
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(express.static('../public'))
-
-//   const path = require('path')
-//   app.get('*', (req, res) => {
-//     res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
-//   })
-// }
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`)
