@@ -14,7 +14,6 @@ app.all('*', function (req, res, next) {
   next()
 })
 
-app.options('*', cors())
 app.use(cookieParser())
 app.use(express.json())
 
