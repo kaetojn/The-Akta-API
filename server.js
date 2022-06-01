@@ -28,7 +28,7 @@ const corsOptions = {
   origin: [
     'http://localhost:8000',
     'https://akta-app-staging.herokuapp.com',
-    'https://akta-app.herokuapp.com',
+    'https://akta-app-prod.herokuapp.com',
   ],
   credentials: true,
 }
