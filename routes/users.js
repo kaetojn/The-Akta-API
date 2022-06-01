@@ -105,6 +105,8 @@ router.route('/login').post((req, res) => {
           token: token,
           userId: user._id,
           user: user.firstName,
+          activeSurveys: user.activeSurveys,
+          completedSurveys: user.completedSurveys,
         })
       })
     })
