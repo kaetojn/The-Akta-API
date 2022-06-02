@@ -8,7 +8,7 @@ const app = express()
 const port = process.env.PORT || 5000
 
 app.get('/', (req, res) => {
-  res.send('Hello World')
+  res.send('Hello API World')
 })
 
 app.options('*', cors())
@@ -34,7 +34,7 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 app.use('/users', require('./routes/users'))
-app.use('/qna', require('./routes/qna'))
+app.use('/responses', require('./routes/responses'))
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`)
