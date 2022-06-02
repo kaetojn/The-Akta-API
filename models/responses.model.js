@@ -8,6 +8,7 @@ const surveyResponses = new Schema(
     userID: { type: String, required: true },
     questionsAndAnswers: { type: Array, required: true },
     isComplete: { type: Boolean, required: true },
+    index: { type: Number },
   },
   {
     timestamps: true,

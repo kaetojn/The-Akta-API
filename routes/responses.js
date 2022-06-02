@@ -8,18 +8,17 @@ router.route('/').get((req, res) => {
 })
 
 router.route('/save').post((req, res) => {
-  const surveyID = req.body.surveyID
-  const userID = req.body.userID
-  const questionsAndAnswers = req.body.questionsAndAnswers
-  const isComplete = req.body.isComplete
+  const { index, isComplete, questionsAndAnswers, userID, surveyID } = req.body
 
   Responses.findOne({ surveyID, userID }).then((response) => {
     if (!response) {
+      // Save New Completed Response
       const newSurveyResponse = new Responses({
         surveyID,
         userID,
         questionsAndAnswers,
         isComplete,
+        index,
       })
 
       newSurveyResponse
@@ -27,6 +26,7 @@ router.route('/save').post((req, res) => {
         .then(() => res.json('Response Saved!'))
         .catch((err) => res.status(400).json('Error: ' + err))
     } else {
+      // Update a Previously Started Response
       const filter = {
         'surveyID': surveyID,
         'userID': userID,
@@ -35,6 +35,7 @@ router.route('/save').post((req, res) => {
         $set: {
           'questionsAndAnswers': questionsAndAnswers,
           'isComplete': isComplete,
+          'index': index,
         },
       }
 
@@ -43,6 +44,23 @@ router.route('/save').post((req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
     }
   })
+})
+
+router.route('/progress').post((req, res) => {
+  const { surveyID, userID } = req.body
+
+  Responses.findOne({ surveyID, userID })
+    .then((response) => {
+      if (response) {
+        return res.status(200).json({
+          questionsAndAnswers: response.questionsAndAnswers,
+          index: response.index,
+        })
+      } else {
+        console.log('Response Progress Not Found')
+      }
+    })
+    .catch((err) => res.status(400).json('Error: ' + err))
 })
 
 router.route('/:id').get((req, res) => {
