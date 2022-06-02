@@ -13,6 +13,7 @@ router.route('/').get((req, res) => {
     .catch((err) => res.status(400).json('Error: ' + err))
 })
 
+// FORGOTTEN PASSWORD
 router.route('/reset-password').post((req, res) => {
   const { email } = req.body
 
@@ -60,6 +61,7 @@ router.route('/reset-password').post((req, res) => {
   })
 })
 
+// REGISTER A NEW USER
 router.route('/register').post((req, res) => {
   const { firstName, lastName, email, password } = req.body
 
@@ -84,6 +86,26 @@ router.route('/register').post((req, res) => {
   })
 })
 
+// UPDATE USERS ACTIVE AND COMPLETED SURVEYS
+router.route('/update-surveys').post((req, res) => {
+  const { activeSurveys, completedSurveys, email } = req.body
+
+  const filter = {
+    'email': email,
+  }
+  const update = {
+    $set: {
+      'activeSurveys': activeSurveys,
+      'completedSurveys': completedSurveys,
+    },
+  }
+
+  User.updateOne(filter, update)
+    .then(() => res.json('User Survey Updated!'))
+    .catch((err) => res.status(400).json('Error: ' + err))
+})
+
+// SIGN IN A USER
 router.route('/login').post((req, res) => {
   const { email, password } = req.body
 
@@ -104,7 +126,7 @@ router.route('/login').post((req, res) => {
         return res.status(200).json({
           token: token,
           userId: user._id,
-          user: user.firstName,
+          user: user,
           activeSurveys: user.activeSurveys,
           completedSurveys: user.completedSurveys,
         })
