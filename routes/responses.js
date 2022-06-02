@@ -13,39 +13,36 @@ router.route('/save').post((req, res) => {
   const questionsAndAnswers = req.body.questionsAndAnswers
   const isComplete = req.body.isComplete
 
-  const newSurveyResponse = new Responses({
-    surveyID,
-    userID,
-    questionsAndAnswers,
-    isComplete,
+  Responses.findOne({ surveyID, userID }).then((response) => {
+    if (!response) {
+      const newSurveyResponse = new Responses({
+        surveyID,
+        userID,
+        questionsAndAnswers,
+        isComplete,
+      })
+
+      newSurveyResponse
+        .save()
+        .then(() => res.json('Response Saved!'))
+        .catch((err) => res.status(400).json('Error: ' + err))
+    } else {
+      const filter = {
+        'surveyID': surveyID,
+        'userID': userID,
+      }
+      const update = {
+        $set: {
+          'questionsAndAnswers': questionsAndAnswers,
+          'isComplete': isComplete,
+        },
+      }
+
+      Responses.updateOne(filter, update)
+        .then(() => res.json('Response Updated!'))
+        .catch((err) => res.status(400).json('Error: ' + err))
+    }
   })
-
-  newSurveyResponse
-    .save()
-    .then(() => res.json('Response Saved!'))
-    .catch((err) => res.status(400).json('Error: ' + err))
-})
-
-router.route('/update').put((req, res) => {
-  const surveyID = req.body.surveyID
-  const userID = req.body.userID
-  const questionsAndAnswers = req.body.questionsAndAnswers
-  const isComplete = req.body.isComplete
-
-  const filter = {
-    'surveyID': surveyID,
-    'userID': userID,
-  }
-  const update = {
-    $set: {
-      'questionsAndAnswers': questionsAndAnswers,
-      'isComplete': isComplete,
-    },
-  }
-
-  Responses.updateOne(filter, update)
-    .then((response) => res.json(response))
-    .catch((err) => res.status(400).json('Error: ' + err))
 })
 
 router.route('/:id').get((req, res) => {
