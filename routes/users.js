@@ -63,12 +63,12 @@ router.route('/reset-password').post((req, res) => {
 
 // REGISTER A NEW USER
 router.route('/register').post((req, res) => {
-  const { firstName, lastName, email, password } = req.body
+  const { firstName, lastName, email, password, userType } = req.body
 
   User.findOne({ email: email }).then((user) => {
     if (user) return res.status(400).json({ msg: 'User already exists' })
 
-    const newUser = new User({ firstName, lastName, email, password })
+    const newUser = new User({ firstName, lastName, email, password, userType })
 
     //Password hashing
     bcrypt.genSalt(12, (err, salt) =>
@@ -129,6 +129,7 @@ router.route('/login').post((req, res) => {
           user: user,
           activeSurveys: user.activeSurveys,
           completedSurveys: user.completedSurveys,
+          userType: user.userType,
         })
       })
     })
