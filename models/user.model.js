@@ -27,6 +27,10 @@ const userSchema = new Schema(
     completedSurveys: {
       type: Array,
     },
+    userType: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
