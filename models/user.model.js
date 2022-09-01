@@ -31,6 +31,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    hasCompletedProfile: {
+      type: Boolean,
+    },
   },
   {
     timestamps: true,

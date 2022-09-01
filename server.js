@@ -35,6 +35,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use('/users', require('./routes/users'))
 app.use('/responses', require('./routes/responses'))
+app.use('/profile', require('./routes/profile'))
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`)
