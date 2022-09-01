@@ -63,12 +63,26 @@ router.route('/reset-password').post((req, res) => {
 
 // REGISTER A NEW USER
 router.route('/register').post((req, res) => {
-  const { firstName, lastName, email, password, userType } = req.body
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    userType,
+    hasCompletedProfile,
+  } = req.body
 
   User.findOne({ email: email }).then((user) => {
     if (user) return res.status(400).json({ msg: 'User already exists' })
 
-    const newUser = new User({ firstName, lastName, email, password, userType })
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      password,
+      userType,
+      hasCompletedProfile,
+    })
 
     //Password hashing
     bcrypt.genSalt(12, (err, salt) =>
@@ -105,6 +119,26 @@ router.route('/update-surveys').post((req, res) => {
     .catch((err) => res.status(400).json('Error: ' + err))
 })
 
+// COMPLETE PROFILE
+router.route('/complete-profile').post((req, res) => {
+  const { userID } = req.body
+
+  const filter = {
+    '_id': userID,
+  }
+  const update = [
+    {
+      '$set': {
+        'hasCompletedProfile': { '$eq': [false, '$hasCompletedProfile'] },
+      },
+    },
+  ]
+
+  User.updateOne(filter, update)
+    .then(() => res.json('User Profile Completed!'))
+    .catch((err) => res.status(400).json('Error: ' + err))
+})
+
 // SIGN IN A USER
 router.route('/login').post((req, res) => {
   const { email, password } = req.body
@@ -130,6 +164,7 @@ router.route('/login').post((req, res) => {
           activeSurveys: user.activeSurveys,
           completedSurveys: user.completedSurveys,
           userType: user.userType,
+          hasCompletedProfile: user.hasCompletedProfile,
         })
       })
     })
